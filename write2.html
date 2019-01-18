@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>WRITE</title>
+
+    <script src="https://www.gstatic.com/firebasejs/5.7.3/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyBB_dYcQRp0QQgRZsUMgF3GGv9Nm9Km-bs",
+        authDomain: "dbtestxd.firebaseapp.com",
+        databaseURL: "https://dbtestxd.firebaseio.com",
+        projectId: "dbtestxd",
+        storageBucket: "dbtestxd.appspot.com",
+        messagingSenderId: "588078189204"
+      };
+      firebase.initializeApp(config);
+    </script>
+
+</head>
+<body>
+
+    <h1>PEDIDOS</h1>
+
+        <table>
+                <tr>
+                 <td>Order Id: </td>
+                 <td><input type="number" name="id" id="order_id" /></td>
+                </tr>
+                <tr>
+                  <td>Code: </td>
+                  <td><input type="number" name="code" id="code" /></td>
+                 </tr>
+                <tr>
+                 <td>Name: </td>
+                 <td><input type="text" name="name" id="name" /></td>
+                </tr>
+                <tr>
+                 <td colspan="2">
+                  <input type="button" value="Save" onclick="save_item();" />
+                  <input type="button" value="Update" onclick="update_item();" />
+                  <input type="button" value="Delete" onclick="delete_item();" />
+                 </td>
+                </tr>
+               </table>
+
+               <a href="read.html">LINK</a>
+               
+               <h3>Items List</h3>
+               
+               <table id="tbl_items_list" border="1">
+                <tr>
+                 <td>#item_id</td>
+                </tr>
+               </table>
+
+<a href="read.html">READ</a>
+<a href="index.html">INDEX</a>
+
+<br>
+
+<input type="button" value="" onclick="pushorder();" />
+
+               <script>
+
+
+var tblItems = document.getElementById('tbl_items_list');
+        var databaseRef = firebase.database().ref('orders/');
+        var rowIndex = 1;
+        
+        databaseRef.once('value', function(snapshot) {
+          snapshot.forEach(function(childSnapshot) {
+         var childKey = childSnapshot.key;
+         var childData = childSnapshot.val();
+         
+         var row = tblItems.insertRow(rowIndex);
+         var cellId = row.insertCell(0);
+         var cellId1 = row.insertCell(1);
+         var cellName = row.insertCell(2);
+         var cellCode = row.insertCell(3);
+         cellId.appendChild(document.createTextNode(childKey));
+         
+         rowIndex = rowIndex + 1;
+          });
+        });
+ 
+                     
+                    function save_item(){
+                    
+                     var iid = firebase.database().ref().child('orders').push().key;
+
+                     var name = document.getElementById('name').value;
+
+                     var code = document.getElementById('code').value;
+
+                     var order_id= document.getElementById('order_id').value;
+                     
+                     var data = {
+                      item_id: iid,
+                      name: name,
+                      code: code,
+                      order_id: order_id
+                     }
+                     
+                     var updates = {};
+                     updates['/orders/' + iid] = data;
+                     firebase.database().ref().update(updates);
+                     
+                     alert('The user is created successfully!');
+                     reload_page();
+                    }
+                    
+                    function update_item(){
+                     var name = document.getElementById('name').value;
+                     var item_id = document.getElementById('item_id').value;
+                     var code = document.getElementById('code').value;
+                     var order_id = document.getElementById('order_id').value;
+                  
+                     var data = {
+                      item_id: item_id,
+                      name: name,
+                      code: code,
+                      order_id: order_id
+                     }
+                     
+                     var updates = {};
+                     updates['/inventory/' + item_id] = data;
+                     firebase.database().ref().update(updates);
+                     
+                     alert('The user is updated successfully!');
+                     
+                     reload_page();
+                    }
+                    
+                    function delete_item(){
+                     var item_id = document.getElementById('item_id').value;
+                    
+                     firebase.database().ref().child('/inventory/' + item_id).remove();
+                     alert('The user is deleted successfully!');
+                     reload_page();
+                    }
+
+
+
+                    function pushorder(){
+
+                      var pedido = {};
+
+                      var databaseRef = firebase.database().ref('inventory/');
+
+                      databaseRef.once('value', function(snapshot) {
+                      snapshot.forEach(function(childSnapshot) {
+
+
+                        
+          });
+        });
+
+
+                    }
+                    
+                    
+                   </script>
+
+
+    
+</body>
+</html>

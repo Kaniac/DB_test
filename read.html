@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>read</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/5.7.3/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyBB_dYcQRp0QQgRZsUMgF3GGv9Nm9Km-bs",
+        authDomain: "dbtestxd.firebaseapp.com",
+        databaseURL: "https://dbtestxd.firebaseio.com",
+        projectId: "dbtestxd",
+        storageBucket: "dbtestxd.appspot.com",
+        messagingSenderId: "588078189204"
+      };
+      firebase.initializeApp(config);
+    </script>
+
+</head>
+<body>
+
+        <h3>Items List</h3>
+               
+        <table id="tbl_items_list" border="1">
+         <tr>
+          <td>#item_id</td>
+          <td>NAME</td>
+          <td>CODE</td>
+         </tr>
+        </table>
+        
+        <br>
+
+        <table id="tbl_items_list1" border="1">
+          <tr>
+           <td>#item_id</td>
+           <td>#order_id</td>
+           <td>NAME</td>
+           <td>CODE</td>
+          </tr>
+         </table>
+
+         <br>
+
+        <a href="index.html">INDEX</a>
+        <a href="write2.html">WRITE</a>
+
+<script>
+        var tblItems = document.getElementById('tbl_items_list');
+        var databaseRef = firebase.database().ref('inventory/');
+        var rowIndex = 1;
+        
+        databaseRef.once('value', function(snapshot) {
+          snapshot.forEach(function(childSnapshot) {
+         var childKey = childSnapshot.key;
+         var childData = childSnapshot.val();
+         
+         var row = tblItems.insertRow(rowIndex);
+         var cellId = row.insertCell(0);
+         var cellName = row.insertCell(1);
+         var cellCode = row.insertCell(2);
+
+         cellId.appendChild(document.createTextNode(childKey));
+         cellName.appendChild(document.createTextNode(childData.name));
+         cellCode.appendChild(document.createTextNode(childData.code));
+         
+         
+         rowIndex = rowIndex + 1;
+          });
+        });
+
+
+        var tblItems1 = document.getElementById('tbl_items_list1');
+        var databaseRef1 = firebase.database().ref('orders/');
+        var rowIndex1 = 1;
+        
+        databaseRef1.once('value', function(snapshot) {
+          snapshot.forEach(function(childSnapshot) {
+         var childKey1 = childSnapshot.key;
+         var childData1 = childSnapshot.val();
+         
+         var row1 = tblItems1.insertRow(rowIndex1);
+         var cellId0 = row1.insertCell(0);
+
+         var cellId1 = row1.insertCell(1);
+         var cellName1 = row1.insertCell(2);
+         var cellCode1 = row1.insertCell(3);
+
+         cellId0.appendChild(document.createTextNode(childKey1));     
+         cellId1.appendChild(document.createTextNode(childData1.order_id));
+         cellName1.appendChild(document.createTextNode(childData1.name));
+         cellCode1.appendChild(document.createTextNode(childData1.code));
+         
+         rowIndex1 = rowIndex1 + 1;
+
+
+          });
+        });
+
+
+       /* setTimeout(function(){
+   window.location.reload(1);
+}, 10000);*/
+
+    </script>
+
+    
+</body>
+</html>
